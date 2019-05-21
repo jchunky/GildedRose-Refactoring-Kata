@@ -1,4 +1,4 @@
-class Item {
+export class Item {
   constructor(name, sellIn, quality){
     this.name = name;
     this.sellIn = sellIn;
@@ -6,7 +6,7 @@ class Item {
   }
 }
 
-class Shop {
+export class ShopOld {
   constructor(items=[]){
     this.items = items;
   }
