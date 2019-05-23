@@ -13,13 +13,8 @@
   },
   "extends": ["airbnb", "prettier"],
   "rules": {
-    "linebreak-style": "off",
-    "import/extensions": "off",
     "import/no-default-export": "off",
-    "import/no-unresolved": "off",
     "import/prefer-default-export": "off",
-    "plugin:import/errors",
-    "plugin:import/warnings",
     "prettier/prettier": "error"
   }
 }
