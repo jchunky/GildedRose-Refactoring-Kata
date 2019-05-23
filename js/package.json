@@ -26,5 +26,6 @@
     "watch": "jest --no-cache --watch ./*",
     "lint": "eslint --fix .",
     "lint-test": "eslint --fix . && jest --no-cache ./*"
-  }
+  },
+  "license": "MIT"
 }
