@@ -1,8 +1,8 @@
 # guard
 
-ignore /.git/
+ignore(/.git/)
 
-watch(/.*/) do |path|
-  system "source ~/.bashrc; yarn eslint --fix #{path[0]}; yarn test"
+watch(/.*/) do |match|
+  path = match[0]
+  system "source ~/.bashrc; yarn eslint --fix #{path}; yarn test"
 end
-
