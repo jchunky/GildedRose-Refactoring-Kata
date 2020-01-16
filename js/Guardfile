@@ -1,6 +1,7 @@
 # guard
 
 ignore(/.git/)
+ignore(/node_modules/)
 
 watch(/.*/) do |match|
   path = match[0]
