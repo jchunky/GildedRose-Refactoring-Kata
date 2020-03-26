@@ -3,6 +3,6 @@
 ignore /.git/
 
 watch(/.*/) do |file, _|
-  system "rubocop --auto-correct #{file}"
+  # system "rubocop --auto-correct #{file}"
   system 'ruby *_test.rb'
 end
