@@ -3,58 +3,7 @@ Layout/BlockAlignment:
 
 Layout/ClassStructure:
   Enabled: true
-  AutoCorrect: false
-  Categories:
-    module_inclusion:
-      - include
-      - prepend
-      - extend
-    attributes:
-      - attribute
-      - attr_reader
-      - attr_writer
-      - attr_accessor
-      - squish_attributes
-      - delegate
-    associations:
-      - has_one
-      - has_many
-      - belongs_to
-      - has_and_belongs_to_many
-    validations:
-      - validate
-      - validates
-      - validates_presence_of
-      - validates_uniqueness_of
-    hooks:
-      - before_validation
-      - after_validation
-      - before_save
-      - around_save
-      - before_create
-      - around_create
-      - after_create
-      - before_update
-      - around_update
-      - after_update
-      - before_destroy
-      - around_destroy
-      - after_destroy
-      - after_save
-      - after_commit
-      - after_rollback
-  ExpectedOrder:
-      - module_inclusion
-      - constants
-      - attributes
-      - associations
-      - validations
-      - hooks
-      - public_class_methods
-      - initializer
-      - public_methods
-      - protected_methods
-      - private_methods
+  AutoCorrect: true
 
 Layout/DefEndAlignment:
   AutoCorrect: true
