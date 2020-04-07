@@ -1,4 +1,64 @@
+module AgedBrie
+  extend self
+
+  def match?(item)
+    item.name == 'Aged Brie'
+  end
+
+  def update_quality(item)
+    item.quality += item.sell_in < 0 ? 2 : 1
+  end
+end
+
+module BackstagePasses
+  extend self
+
+  def match?(item)
+    item.name.start_with?('Backstage passes')
+  end
+
+  def update_quality(item)
+    case item.sell_in
+    when (10..) then item.quality += 1
+    when (5..) then item.quality += 2
+    when (0..) then item.quality += 3
+    else item.quality = 0
+    end
+  end
+end
+
+module NormalItem
+  extend self
+
+  def match?(_item)
+    true
+  end
+
+  def update_quality(item)
+    item.quality -= item.sell_in < 0 ? 2 : 1
+  end
+end
+
+module ConjuredItem
+  extend self
+
+  def match?(item)
+    item.name.start_with?('Conjured')
+  end
+
+  def update_quality(item)
+    item.quality -= item.sell_in < 0 ? 4 : 2
+  end
+end
+
 class GildedRose < Struct.new(:items)
+  ITEM_TYPES = [
+    AgedBrie,
+    BackstagePasses,
+    # ConjuredItem,
+    NormalItem
+  ]
+
   def update_quality
     items.each(&method(:update_item))
   end
@@ -13,18 +73,7 @@ class GildedRose < Struct.new(:items)
   end
 
   def update_item_quality(item)
-    case item.name
-    when /Aged Brie/
-      item.quality += item.sell_in < 0 ? 2 : 1
-    when /Backstage passes/
-      case item.sell_in
-      when (10..) then item.quality += 1
-      when (5..) then item.quality += 2
-      when (0..) then item.quality += 3
-      else item.quality = 0
-      end
-    else
-      item.quality -= item.sell_in < 0 ? 2 : 1
-    end
+    item_type = ITEM_TYPES.find { |type| type.match?(item) }
+    item_type.update_quality(item)
   end
 end
