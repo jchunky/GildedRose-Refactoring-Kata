@@ -1,68 +1,40 @@
-class GildedRose
-
-  def initialize(items)
-    @items = items
+GildedRose = Struct.new(:items) do
+  def update_quality
+    items.each(&method(:update_item))
   end
 
-  def update_quality()
-    @items.each do |item|
-      if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert"
-        if item.quality > 0
-          if item.name != "Sulfuras, Hand of Ragnaros"
-            item.quality = item.quality - 1
-          end
-        end
-      else
-        if item.quality < 50
-          item.quality = item.quality + 1
-          if item.name == "Backstage passes to a TAFKAL80ETC concert"
-            if item.sell_in < 11
-              if item.quality < 50
-                item.quality = item.quality + 1
-              end
-            end
-            if item.sell_in < 6
-              if item.quality < 50
-                item.quality = item.quality + 1
-              end
-            end
-          end
-        end
-      end
-      if item.name != "Sulfuras, Hand of Ragnaros"
-        item.sell_in = item.sell_in - 1
-      end
-      if item.sell_in < 0
-        if item.name != "Aged Brie"
-          if item.name != "Backstage passes to a TAFKAL80ETC concert"
-            if item.quality > 0
-              if item.name != "Sulfuras, Hand of Ragnaros"
-                item.quality = item.quality - 1
-              end
-            end
-          else
-            item.quality = item.quality - item.quality
-          end
-        else
-          if item.quality < 50
-            item.quality = item.quality + 1
-          end
-        end
-      end
+  private
+
+  def update_item(item)
+    return if item.name == "Sulfuras, Hand of Ragnaros"
+
+    item.sell_in -= 1
+    update_item_quality(item)
+    item.quality = item.quality.clamp(0, 50)
+  end
+
+  def update_item_quality(item)
+    case item.name
+    when /Aged Brie/ then aged_brie(item)
+    when /Backstage passes/ then backstage_passes(item)
+    else standard_item(item)
     end
   end
-end
 
-class Item
-  attr_accessor :name, :sell_in, :quality
-
-  def initialize(name, sell_in, quality)
-    @name = name
-    @sell_in = sell_in
-    @quality = quality
+  def aged_brie(item)
+    item.quality += item.sell_in < 0 ? 2 : 1
   end
 
-  def to_s()
-    "#{@name}, #{@sell_in}, #{@quality}"
+  def backstage_passes(item)
+    case item.sell_in
+    when (10..) then item.quality += 1
+    when (5..) then item.quality += 2
+    when (0..) then item.quality += 3
+    else item.quality = 0
+    end
+  end
+
+  def standard_item(item)
+    item.quality -= item.sell_in < 0 ? 2 : 1
   end
 end
