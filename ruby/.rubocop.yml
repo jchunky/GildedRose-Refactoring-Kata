@@ -32,8 +32,6 @@ Layout/EndAlignment:
 Layout/LineLength:
   Enabled: true
   AutoCorrect: true
-Style/NumericPredicate:
-  AutoCorrect: true
 
 # Indentation
 Layout/BlockAlignment:
@@ -83,6 +81,8 @@ Style/FormatStringToken:
 Style/FrozenStringLiteralComment:
   Enabled: false
 Style/MutableConstant:
+  Enabled: false
+Style/NumericPredicate:
   Enabled: false
 
 # Class structure
