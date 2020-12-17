@@ -11,38 +11,25 @@ export class Shop {
   updateItem(item) {
     if (item.name === "Aged Brie") {
       item.sellIn--;
-      item.quality++;
-      if (item.sellIn < 0) {
-        item.quality++;
-      }
-      if (item.quality > 50) {
-        item.quality = 50;
-      }
+      item.quality += item.sellIn < 0 ? 2 : 1;
+      if (item.quality > 50) item.quality = 50;
     } else if (item.name === "Backstage passes to a TAFKAL80ETC concert") {
       item.sellIn--;
-      item.quality++;
-      if (item.sellIn < 10) {
-        item.quality++;
+      if (item.sellIn >= 10) {
+        item.quality += 1;
+      } else if (item.sellIn >= 5) {
+        item.quality += 2;
+      } else if (item.sellIn >= 0) {
+        item.quality += 3;
+      } else {
+        item.quality = 0;
       }
-      if (item.sellIn < 5) {
-        item.quality++;
-      }
-      if (item.sellIn < 0) {
-        item.quality = item.quality - item.quality;
-      }
-      if (item.quality > 50) {
-        item.quality = 50;
-      }
+      if (item.quality > 50) item.quality = 50;
     } else if (item.name === "Sulfuras, Hand of Ragnaros") {
     } else {
       item.sellIn--;
-      item.quality--;
-      if (item.sellIn < 0) {
-        item.quality--;
-      }
-      if (item.quality < 0) {
-        item.quality = 0;
-      }
+      item.quality -= item.sellIn < 0 ? 2 : 1;
+      if (item.quality < 0) item.quality = 0;
     }
   }
 }
