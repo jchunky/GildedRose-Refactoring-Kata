@@ -16,10 +16,15 @@ def print_line(character)
   puts "\n" + character * 80 + "\n"
 end
 
-watch(/.*\.js/) do |match|
+watch(/.*\.js$/) do |match|
+  system("clear")
   print_line("=")
   path = match[0]
   puts "Processing file: #{path}..."
-  system "source ~/.bashrc; yarn eslint --fix #{path}; yarn test"
-  puts "Done."
+  system "source ~/.bashrc; yarn pretty #{path}"
+  print_line("-")
+  system "source ~/.bashrc; yarn eslint --fix #{path}"
+  print_line("-")
+  system "source ~/.bashrc; yarn test"
+  print_line("-")
 end
