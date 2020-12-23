@@ -20,7 +20,6 @@
   ],
   "rules": {
     "linebreak-style": "off",
-
     "import/extensions": "off",
     "import/no-default-export": "off",
     "import/no-unresolved": "off",
