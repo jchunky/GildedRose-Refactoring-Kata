@@ -1,68 +1,53 @@
-class GildedRose
-
-  def initialize(items)
-    @items = items
-  end
-
-  def update_quality()
-    @items.each do |item|
-      if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert"
-        if item.quality > 0
-          if item.name != "Sulfuras, Hand of Ragnaros"
-            item.quality = item.quality - 1
-          end
-        end
-      else
-        if item.quality < 50
-          item.quality = item.quality + 1
-          if item.name == "Backstage passes to a TAFKAL80ETC concert"
-            if item.sell_in < 11
-              if item.quality < 50
-                item.quality = item.quality + 1
-              end
-            end
-            if item.sell_in < 6
-              if item.quality < 50
-                item.quality = item.quality + 1
-              end
-            end
-          end
-        end
-      end
-      if item.name != "Sulfuras, Hand of Ragnaros"
-        item.sell_in = item.sell_in - 1
-      end
-      if item.sell_in < 0
-        if item.name != "Aged Brie"
-          if item.name != "Backstage passes to a TAFKAL80ETC concert"
-            if item.quality > 0
-              if item.name != "Sulfuras, Hand of Ragnaros"
-                item.quality = item.quality - 1
-              end
-            end
-          else
-            item.quality = item.quality - item.quality
-          end
-        else
-          if item.quality < 50
-            item.quality = item.quality + 1
-          end
-        end
-      end
-    end
+module Sulfuras
+  def self.update_item(_item)
+    # no-op
   end
 end
 
-class Item
-  attr_accessor :name, :sell_in, :quality
+module AgedBrie
+  def self.update_item(item)
+    item.sell_in -= 1
+    item.quality += item.sell_in < 0 ? 2 : 1
+    item.quality = item.quality.clamp(0, 50)
+  end
+end
 
-  def initialize(name, sell_in, quality)
-    @name = name
-    @sell_in = sell_in
-    @quality = quality
+module BackstagePasses
+  def self.update_item(item)
+    item.sell_in -= 1
+    case item.sell_in
+    when (10..) then item.quality += 1
+    when (5..) then item.quality += 2
+    when (0..) then item.quality += 3
+    else item.quality = 0
+    end
+    item.quality = item.quality.clamp(0, 50)
+  end
+end
+
+module NormalItem
+  def self.update_item(item)
+    item.sell_in -= 1
+    item.quality -= item.sell_in < 0 ? 2 : 1
+    item.quality = item.quality.clamp(0, 50)
+  end
+end
+
+class GildedRose < Struct.new(:items)
+  def update_quality
+    items.each(&method(:update_item))
   end
 
-  def to_s()
-    "#{@name}, #{@sell_in}, #{@quality}"
+  def update_item(item)
+    item_updater(item).update_item(item)
+  end
+
+  def item_updater(item)
+    case item.name
+    when /Aged Brie/ then AgedBrie
+    when /Backstage passes/ then BackstagePasses
+    when /Sulfuras/ then Sulfuras
+    else NormalItem
+    end
   end
 end
