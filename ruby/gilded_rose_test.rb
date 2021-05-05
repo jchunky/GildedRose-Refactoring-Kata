@@ -14,7 +14,7 @@ class TestGildedRose < Test::Unit::TestCase
       gilded_rose2.update_quality
 
       items.size.times do |i|
-        assert_equal items_old[i].to_s, items1[i].to_s
+        assert_equal items_old[i].to_s, items[i].to_s
       end
     end
   end
