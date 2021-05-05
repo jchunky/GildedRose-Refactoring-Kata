@@ -17,3 +17,6 @@ detectors:
   #   enabled: true
   # UtilityFunction:
   #   public_methods_only: true
+exclude_paths:
+  - gilded_rose_old.rb
+  - gilded_rose_test.rb
