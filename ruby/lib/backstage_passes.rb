@@ -5,13 +5,13 @@ class BackstagePasses < Item
 
   def update
     @sell_in -= 1
-    @quality = backstage_passes_quality
+    @quality = new_quality
     @quality = quality.clamp(0, 50)
   end
 
   private
 
-  def backstage_passes_quality
+  def new_quality
     case sell_in
     when (10..) then quality + 1
     when (5..) then quality + 2
