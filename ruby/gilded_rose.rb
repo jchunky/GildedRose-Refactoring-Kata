@@ -1,68 +1,57 @@
-class GildedRose
-
-  def initialize(items)
-    @items = items
-  end
-
-  def update_quality()
-    @items.each do |item|
-      if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert"
-        if item.quality > 0
-          if item.name != "Sulfuras, Hand of Ragnaros"
-            item.quality = item.quality - 1
-          end
-        end
-      else
-        if item.quality < 50
-          item.quality = item.quality + 1
-          if item.name == "Backstage passes to a TAFKAL80ETC concert"
-            if item.sell_in < 11
-              if item.quality < 50
-                item.quality = item.quality + 1
-              end
-            end
-            if item.sell_in < 6
-              if item.quality < 50
-                item.quality = item.quality + 1
-              end
-            end
-          end
-        end
-      end
-      if item.name != "Sulfuras, Hand of Ragnaros"
-        item.sell_in = item.sell_in - 1
-      end
-      if item.sell_in < 0
-        if item.name != "Aged Brie"
-          if item.name != "Backstage passes to a TAFKAL80ETC concert"
-            if item.quality > 0
-              if item.name != "Sulfuras, Hand of Ragnaros"
-                item.quality = item.quality - 1
-              end
-            end
-          else
-            item.quality = item.quality - item.quality
-          end
-        else
-          if item.quality < 50
-            item.quality = item.quality + 1
-          end
-        end
-      end
-    end
+class GildedRose < Struct.new(:items)
+  def update_quality
+    items.each(&:update)
   end
 end
 
-class Item
-  attr_accessor :name, :sell_in, :quality
-
-  def initialize(name, sell_in, quality)
-    @name = name
-    @sell_in = sell_in
-    @quality = quality
+class Item < Struct.new(:name, :sell_in, :quality)
+  def to_s
+    [name, sell_in, quality].join(", ")
   end
 
-  def to_s()
-    "#{@name}, #{@sell_in}, #{@quality}"
+  def update
+    case name
+    when "Aged Brie"
+      aged_brie
+    when "Backstage passes to a TAFKAL80ETC concert"
+      backstage_passes
+    when "Sulfuras, Hand of Ragnaros"
+      sulfuras
+    else
+      normal_item
+    end
+  end
+
+  private
+
+  def aged_brie
+    self.sell_in -= 1
+    self.quality += sell_in < 0 ? 2 : 1
+    self.quality = quality.clamp(0, 50)
+  end
+
+  def backstage_passes
+    self.sell_in -= 1
+    self.quality += backstage_passes_quality_delta
+    self.quality = quality.clamp(0, 50)
+  end
+
+  def backstage_passes_quality_delta
+    case sell_in
+    when (10..) then 1
+    when (5..) then 2
+    when (0..) then 3
+    else -quality
+    end
+  end
+
+  def sulfuras
+    # no-op
+  end
+
+  def normal_item
+    self.sell_in -= 1
+    self.quality -= sell_in < 0 ? 2 : 1
+    self.quality = quality.clamp(0, 50)
   end
 end
