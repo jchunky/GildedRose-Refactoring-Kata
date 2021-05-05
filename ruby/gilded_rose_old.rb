@@ -52,3 +52,9 @@ class GildedRoseOld
     end
   end
 end
+
+class ItemOld < Struct.new(:name, :sell_in, :quality)
+  def to_s
+    [name, sell_in, quality].join(", ")
+  end
+end

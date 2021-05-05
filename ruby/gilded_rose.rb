@@ -4,7 +4,15 @@ class GildedRose < Struct.new(:items)
   end
 end
 
-class Item < Struct.new(:name, :sell_in, :quality)
+class Item
+  attr_reader :name, :sell_in, :quality
+
+  def initialize(name, sell_in, quality)
+    @name = name
+    @sell_in = sell_in
+    @quality = quality
+  end
+
   def to_s
     [name, sell_in, quality].join(", ")
   end
@@ -25,23 +33,23 @@ class Item < Struct.new(:name, :sell_in, :quality)
   private
 
   def aged_brie
-    self.sell_in -= 1
-    self.quality += sell_in < 0 ? 2 : 1
-    self.quality = quality.clamp(0, 50)
+    @sell_in -= 1
+    @quality += sell_in < 0 ? 2 : 1
+    @quality = quality.clamp(0, 50)
   end
 
   def backstage_passes
-    self.sell_in -= 1
-    self.quality += backstage_passes_quality_delta
-    self.quality = quality.clamp(0, 50)
+    @sell_in -= 1
+    @quality = backstage_passes_quality
+    @quality = quality.clamp(0, 50)
   end
 
-  def backstage_passes_quality_delta
+  def backstage_passes_quality
     case sell_in
-    when (10..) then 1
-    when (5..) then 2
-    when (0..) then 3
-    else -quality
+    when (10..) then quality + 1
+    when (5..) then quality + 2
+    when (0..) then quality + 3
+    else 0
     end
   end
 
@@ -50,8 +58,8 @@ class Item < Struct.new(:name, :sell_in, :quality)
   end
 
   def normal_item
-    self.sell_in -= 1
-    self.quality -= sell_in < 0 ? 2 : 1
-    self.quality = quality.clamp(0, 50)
+    @sell_in -= 1
+    @quality -= sell_in < 0 ? 2 : 1
+    @quality = quality.clamp(0, 50)
   end
 end
