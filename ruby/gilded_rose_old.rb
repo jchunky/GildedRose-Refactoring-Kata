@@ -53,7 +53,7 @@ class GildedRoseOld
   end
 end
 
-class Item
+class ItemOld
   attr_accessor :name, :sell_in, :quality
 
   def initialize(name, sell_in, quality)
