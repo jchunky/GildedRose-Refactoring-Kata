@@ -5,7 +5,7 @@ require 'test/unit'
 class TestGildedRose < Test::Unit::TestCase
   def test_behaves_exactly_like_old_implementation
     items = build_items
-    items_old = build_items_old
+    items_old = build_items
     gilded_rose1 = GildedRose.new(items)
     gilded_rose2 = GildedRoseOld.new(items_old)
 
@@ -31,21 +31,6 @@ class TestGildedRose < Test::Unit::TestCase
       Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=5, quality=49),
       # This Conjured item does not work properly yet
       Item.new(name="Conjured Mana Cake", sell_in=3, quality=6), # <-- :O
-    ]
-  end
-
-  def build_items_old
-    [
-      ItemOld.new(name="+5 Dexterity Vest", sell_in=10, quality=20),
-      ItemOld.new(name="Aged Brie", sell_in=2, quality=0),
-      ItemOld.new(name="Elixir of the Mongoose", sell_in=5, quality=7),
-      ItemOld.new(name="Sulfuras, Hand of Ragnaros", sell_in=0, quality=80),
-      ItemOld.new(name="Sulfuras, Hand of Ragnaros", sell_in=-1, quality=80),
-      ItemOld.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=15, quality=20),
-      ItemOld.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=10, quality=49),
-      ItemOld.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=5, quality=49),
-      # This Conjured item does not work properly yet
-      ItemOld.new(name="Conjured Mana Cake", sell_in=3, quality=6), # <-- :O
     ]
   end
 end
