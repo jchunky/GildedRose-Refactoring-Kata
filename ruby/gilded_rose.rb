@@ -9,7 +9,7 @@ class GildedRose < Struct.new(:items)
       item.sell_in -= 1
       item.quality += item.sell_in < 0 ? 2 : 1
       item.quality = item.quality.clamp(0, 50)
-    when "Backstage passes to a TAFKAL80ETC concert"
+    when /Backstage passes/
       item.sell_in -= 1
       case item.sell_in
       when (10..) then item.quality += 1
