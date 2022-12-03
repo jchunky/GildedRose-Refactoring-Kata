@@ -76,6 +76,8 @@ Style/FormatStringToken:
   Enabled: false
 Style/FrozenStringLiteralComment:
   Enabled: false
+Style/GuardClause:
+  Enabled: false
 Style/IdenticalConditionalBranches:
   Enabled: false
 Style/IfUnlessModifier:
