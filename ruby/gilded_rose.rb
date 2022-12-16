@@ -1,54 +1,51 @@
-class GildedRose
+class AgedBrie < Struct.new(:item)
+  def update
+    item.sell_in -= 1
+    item.quality += item.sell_in < 0 ? 2 : 1
+    item.quality = item.quality.clamp(0, 50)
+  end
+end
 
-  def initialize(items)
-    @items = items
+class BackstagePasses < Struct.new(:item)
+  def update
+    item.sell_in -= 1
+    case item.sell_in
+    when (10..) then item.quality += 1
+    when (5..) then item.quality += 2
+    when (0..) then item.quality += 3
+    else item.quality = 0
+    end
+    item.quality = item.quality.clamp(0, 50)
+  end
+end
+
+class Sulfuras < Struct.new(:item)
+  def update
+    # no-op
+  end
+end
+
+class RegularItem < Struct.new(:item)
+  def update
+    item.sell_in -= 1
+    item.quality -= item.sell_in < 0 ? 2 : 1
+    item.quality = item.quality.clamp(0, 50)
+  end
+end
+
+class GildedRose < Struct.new(:items)
+  def update_quality
+    items.each do |item|
+      build_item(item).update
+    end
   end
 
-  def update_quality()
-    @items.each do |item|
-      if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert"
-        if item.quality > 0
-          if item.name != "Sulfuras, Hand of Ragnaros"
-            item.quality = item.quality - 1
-          end
-        end
-      else
-        if item.quality < 50
-          item.quality = item.quality + 1
-          if item.name == "Backstage passes to a TAFKAL80ETC concert"
-            if item.sell_in < 11
-              if item.quality < 50
-                item.quality = item.quality + 1
-              end
-            end
-            if item.sell_in < 6
-              if item.quality < 50
-                item.quality = item.quality + 1
-              end
-            end
-          end
-        end
-      end
-      if item.name != "Sulfuras, Hand of Ragnaros"
-        item.sell_in = item.sell_in - 1
-      end
-      if item.sell_in < 0
-        if item.name != "Aged Brie"
-          if item.name != "Backstage passes to a TAFKAL80ETC concert"
-            if item.quality > 0
-              if item.name != "Sulfuras, Hand of Ragnaros"
-                item.quality = item.quality - 1
-              end
-            end
-          else
-            item.quality = item.quality - item.quality
-          end
-        else
-          if item.quality < 50
-            item.quality = item.quality + 1
-          end
-        end
-      end
-    end
+  def build_item(item)
+    case item.name
+    when "Aged Brie" then AgedBrie
+    when "Backstage passes to a TAFKAL80ETC concert" then BackstagePasses
+    when "Sulfuras, Hand of Ragnaros" then Sulfuras
+    else RegularItem
+    end.new(item)
   end
 end
