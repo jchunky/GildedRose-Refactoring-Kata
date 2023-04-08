@@ -10,14 +10,10 @@ class BackstagePass < Struct.new(:item)
   def update
     item.sell_in -= 1
     case item.sell_in
-    when (10..)
-      item.quality += 1
-    when (5..)
-      item.quality += 2
-    when (0..)
-      item.quality += 3
-    else
-      item.quality = 0
+    when (10..) then item.quality += 1
+    when (5..) then item.quality += 2
+    when (0..) then item.quality += 3
+    else item.quality = 0
     end
     item.quality = item.quality.clamp(0, 50)
   end
@@ -44,14 +40,10 @@ class GildedRose < Struct.new(:items)
 
   def update_item(item)
     case item.name
-    when "Aged Brie"
-      AgedBrie
-    when "Backstage passes to a TAFKAL80ETC concert"
-      BackstagePass
-    when "Sulfuras, Hand of Ragnaros"
-      Sulfuras
-    else
-      Regular
+    when "Aged Brie" then AgedBrie
+    when "Backstage passes to a TAFKAL80ETC concert" then BackstagePass
+    when "Sulfuras, Hand of Ragnaros" then Sulfuras
+    else Regular
     end.new(item).update
   end
 end
