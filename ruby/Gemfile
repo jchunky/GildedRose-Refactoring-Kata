@@ -4,8 +4,7 @@ gem "activesupport"
 
 group :development do
   gem "rake"
-  gem "reek"
-  gem "rubocop"
+  gem "standardrb"
   gem "whats_up"
 end
 
