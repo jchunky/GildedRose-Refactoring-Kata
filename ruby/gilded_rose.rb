@@ -21,6 +21,7 @@ end
 
 class Sulfuras
   def update_item(item)
+    # no-op
   end
 end
 
