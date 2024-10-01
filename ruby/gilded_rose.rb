@@ -6,26 +6,41 @@ class GildedRose < Struct.new(:items)
   def update_item(item)
     case item.name
     when /Aged Brie/
-      item.sell_in -= 1
-      item.quality += item.sell_in < 0 ? 2 : 1
-      item.quality = item.quality.clamp(0, 50)
+      update_aged_brie(item)
     when /Backstage passes/
-      item.sell_in -= 1
-
-      case item.sell_in
-      when (10..) then item.quality += 1
-      when (5..) then item.quality += 2
-      when (0..) then item.quality += 3
-      else item.quality = 0
-      end
-
-      item.quality = item.quality.clamp(0, 50)
+      update_backstage_passes(item)
     when /Sulfuras, Hand of Ragnaros/
       # no-op
     else
-      item.sell_in -= 1
-      item.quality -= item.sell_in < 0 ? 2 : 1
-      item.quality = item.quality.clamp(0, 50)
+      update_normal_item(item)
     end
+  end
+
+  private
+
+  def update_aged_brie(item)
+    item.sell_in -= 1
+    item.quality += item.sell_in < 0 ? 2 : 1
+    item.quality = item.quality.clamp(0, 50)
+  end
+
+  def update_backstage_passes(item)
+    item.sell_in -= 1
+
+    item.quality +=
+      case item.sell_in
+      when (10..) then 1
+      when (5..) then 2
+      when (0..) then 3
+      else -item.quality
+      end
+
+    item.quality = item.quality.clamp(0, 50)
+  end
+
+  def update_normal_item(item)
+    item.sell_in -= 1
+    item.quality -= item.sell_in < 0 ? 2 : 1
+    item.quality = item.quality.clamp(0, 50)
   end
 end
