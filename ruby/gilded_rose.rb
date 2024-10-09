@@ -30,16 +30,28 @@ class GildedRose < Struct.new(:items)
   def quality_delta(item)
     case item.name
     when /Aged Brie/
-      item.sell_in < 0 ? 2 : 1
+      aged_brie_quality_delta(item)
     when /Backstage pass/
-      case item.sell_in
-      when (10..) then 1
-      when (5..) then 2
-      when (0..) then 3
-      else -item.quality
-      end
+      backstage_pass_quality_delta(item)
     else
-      item.sell_in < 0 ? -2 : -1
+      normal_item_quality_delta(item)
     end
+  end
+
+  def aged_brie_quality_delta(item)
+    item.sell_in < 0 ? 2 : 1
+  end
+
+  def backstage_pass_quality_delta(item)
+    case item.sell_in
+    when (10..) then 1
+    when (5..) then 2
+    when (0..) then 3
+    else -item.quality
+    end
+  end
+
+  def normal_item_quality_delta(item)
+    item.sell_in < 0 ? -2 : -1
   end
 end
