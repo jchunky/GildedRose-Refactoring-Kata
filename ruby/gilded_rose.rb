@@ -6,32 +6,40 @@ class GildedRose < Struct.new(:items)
   private
 
   def update_item(item)
+    return if legendary?(item)
+
+    update_sell_in_of(item)
+    update_quality_of(item)
+  end
+
+  private
+
+  def legendary?(item)
+    item.name == "Sulfuras, Hand of Ragnaros"
+  end
+
+  def update_sell_in_of(item)
+    item.sell_in -= 1
+  end
+
+  def update_quality_of(item)
+    change = quality_change(item)
+    item.quality = (item.quality + change).clamp(0..50)
+  end
+
+  def quality_change(item)
     case item.name
-    when "Aged Brie"
-      item.sell_in -= 1
-      item.quality += item.sell_in < 0 ? 2 : 1
-      item.quality = item.quality.clamp(..50)
-    when "Backstage passes to a TAFKAL80ETC concert"
-      item.sell_in -= 1
-
-      item.quality += 1
-      if item.sell_in < 10
-        item.quality += 1
+    when /Aged Brie/
+      item.sell_in < 0 ? 2 : 1
+    when /Backstage pass/
+      case item.sell_in
+      when (10..) then 1
+      when (5..) then 2
+      when (0..) then 3
+      else -item.quality
       end
-      if item.sell_in < 5
-        item.quality += 1
-      end
-      if item.sell_in < 0
-        item.quality += -item.quality
-      end
-
-      item.quality = item.quality.clamp(..50)
-    when "Sulfuras, Hand of Ragnaros"
-      # no-op
     else
-      item.sell_in -= 1
-      item.quality -= item.sell_in < 0 ? 2 : 1
-      item.quality = item.quality.clamp(0..)
+      item.sell_in < 0 ? -2 : -1
     end
   end
 end
