@@ -23,11 +23,11 @@ class GildedRose < Struct.new(:items)
   end
 
   def update_quality_of(item)
-    change = quality_change(item)
-    item.quality = (item.quality + change).clamp(0..50)
+    delta = quality_delta(item)
+    item.quality = (item.quality + delta).clamp(0..50)
   end
 
-  def quality_change(item)
+  def quality_delta(item)
     case item.name
     when /Aged Brie/
       item.sell_in < 0 ? 2 : 1
