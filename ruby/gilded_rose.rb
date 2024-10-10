@@ -1,54 +1,55 @@
-class GildedRose
-
-  def initialize(items)
-    @items = items
+class GildedRose < Struct.new(:items)
+  def update_quality
+    items.each(&method(:update_item))
   end
 
-  def update_quality()
-    @items.each do |item|
-      if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert"
-        if item.quality > 0
-          if item.name != "Sulfuras, Hand of Ragnaros"
-            item.quality = item.quality - 1
-          end
-        end
-      else
-        if item.quality < 50
-          item.quality = item.quality + 1
-          if item.name == "Backstage passes to a TAFKAL80ETC concert"
-            if item.sell_in < 11
-              if item.quality < 50
-                item.quality = item.quality + 1
-              end
-            end
-            if item.sell_in < 6
-              if item.quality < 50
-                item.quality = item.quality + 1
-              end
-            end
-          end
-        end
-      end
-      if item.name != "Sulfuras, Hand of Ragnaros"
-        item.sell_in = item.sell_in - 1
-      end
-      if item.sell_in < 0
-        if item.name != "Aged Brie"
-          if item.name != "Backstage passes to a TAFKAL80ETC concert"
-            if item.quality > 0
-              if item.name != "Sulfuras, Hand of Ragnaros"
-                item.quality = item.quality - 1
-              end
-            end
-          else
-            item.quality = item.quality - item.quality
-          end
-        else
-          if item.quality < 50
-            item.quality = item.quality + 1
-          end
-        end
-      end
+  private
+
+  def update_item(item)
+    return if legendary?(item)
+
+    update_sell_in_of(item)
+    update_quality_of(item)
+  end
+
+  def legendary?(item)
+    item.name == "Sulfuras, Hand of Ragnaros"
+  end
+
+  def update_sell_in_of(item)
+    item.sell_in -= 1
+  end
+
+  def update_quality_of(item)
+    delta = quality_delta(item)
+    item.quality = (item.quality + delta).clamp(0..50)
+  end
+
+  def quality_delta(item)
+    case item.name
+    when "Aged Brie"
+      aged_brie_quality_delta(item)
+    when "Backstage passes to a TAFKAL80ETC concert"
+      backstage_pass_quality_delta(item)
+    else
+      normal_item_quality_delta(item)
     end
+  end
+
+  def aged_brie_quality_delta(item)
+    item.sell_in < 0 ? 2 : 1
+  end
+
+  def backstage_pass_quality_delta(item)
+    case item.sell_in
+    when (10..) then 1
+    when (5..) then 2
+    when (0..) then 3
+    else -item.quality
+    end
+  end
+
+  def normal_item_quality_delta(item)
+    item.sell_in < 0 ? -2 : -1
   end
 end
