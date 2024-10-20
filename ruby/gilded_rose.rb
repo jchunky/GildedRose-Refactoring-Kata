@@ -29,7 +29,7 @@ class GildedRose < Struct.new(:items)
     case item.name
     when /Aged Brie/      then item.sell_in < 0 ? 2 : 1
     when /Backstage pass/ then backstage_pass_quality_delta(item)
-    when /./              then item.sell_in < 0 ? -2 : -1
+    else                       item.sell_in < 0 ? -2 : -1
     end
   end
 
@@ -38,7 +38,7 @@ class GildedRose < Struct.new(:items)
     when (10..) then 1
     when (5..)  then 2
     when (0..)  then 3
-    when (..-1) then -item.quality
+    else             -item.quality
     end
   end
 end
