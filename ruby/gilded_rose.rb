@@ -32,8 +32,8 @@ class GildedRose < Struct.new(:items)
     when /Backstage pass/
       case item.sell_in
       when (10..) then 1
-      when (5..) then 2
-      when (0..) then 3
+      when (5..)  then 2
+      when (0..)  then 3
       else -item.quality
       end
     else
