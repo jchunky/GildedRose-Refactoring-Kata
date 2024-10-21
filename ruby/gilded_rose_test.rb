@@ -4,8 +4,8 @@ require "test/unit"
 
 class TestGildedRose < Test::Unit::TestCase
   def test_behaves_exactly_like_old_implementation
-    items = build_items
-    items_old = build_items
+    items        = build_items
+    items_old    = build_items
     gilded_rose1 = GildedRose.new(items)
     gilded_rose2 = GildedRoseOld.new(items_old)
 

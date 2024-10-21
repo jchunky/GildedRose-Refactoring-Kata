@@ -21,24 +21,24 @@ GildedRose = Data.define(:items) do
   end
 
   def adjust_quality(item)
-    delta = quality_delta(item)
+    delta        = quality_delta(item)
     item.quality = (item.quality + delta).clamp(0, 50)
   end
 
   def quality_delta(item)
     case item.name
-    when /Aged Brie/ then item.sell_in < 0 ? 2 : 1
+    when /Aged Brie/      then item.sell_in < 0 ? 2 : 1
     when /Backstage pass/ then backstage_pass_quality_delta(item)
-    else item.sell_in < 0 ? -2 : -1
+    else                       item.sell_in < 0 ? -2 : -1
     end
   end
 
   def backstage_pass_quality_delta(item)
     case item.sell_in
     when (10..) then 1
-    when (5..) then 2
-    when (0..) then 3
-    else -item.quality
+    when (5..)  then 2
+    when (0..)  then 3
+    else             -item.quality
     end
   end
 end
