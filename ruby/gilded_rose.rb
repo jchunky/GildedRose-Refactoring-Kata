@@ -1,10 +1,4 @@
-class GildedRose
-  attr_reader :items
-
-  def initialize(items)
-    @items = items
-  end
-
+GildedRose = Data.define(:items) do
   def update_quality
     items.each { update_item(_1) }
   end
