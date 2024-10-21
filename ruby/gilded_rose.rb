@@ -1,4 +1,10 @@
-class GildedRose < Struct.new(:items)
+class GildedRose
+  attr_reader :items
+
+  def initialize(items)
+    @items = items
+  end
+
   def update_quality
     items.each { update_item(_1) }
   end
@@ -27,18 +33,18 @@ class GildedRose < Struct.new(:items)
 
   def quality_delta(item)
     case item.name
-    when /Aged Brie/      then item.sell_in < 0 ? 2 : 1
+    when /Aged Brie/ then item.sell_in < 0 ? 2 : 1
     when /Backstage pass/ then backstage_pass_quality_delta(item)
-    else                       item.sell_in < 0 ? -2 : -1
+    else item.sell_in < 0 ? -2 : -1
     end
   end
 
   def backstage_pass_quality_delta(item)
     case item.sell_in
     when (10..) then 1
-    when (5..)  then 2
-    when (0..)  then 3
-    else             -item.quality
+    when (5..) then 2
+    when (0..) then 3
+    else -item.quality
     end
   end
 end
