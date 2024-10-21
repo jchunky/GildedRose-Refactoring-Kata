@@ -35,7 +35,7 @@ class GildedRose
                       when ...0 then -2
                       else           -1
                       end
-      item.quality = item.quality.clamp(0, 50)
+      item.quality  = item.quality.clamp(0, 50)
     end
   end
 end
