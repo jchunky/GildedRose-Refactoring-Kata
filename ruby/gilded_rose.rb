@@ -11,7 +11,7 @@ class GildedRose
 
   def update_item(item)
     case item.name
-    when "Aged Brie"
+    when /Aged Brie/
       item.sell_in -= 1
 
       item.quality += case item.sell_in
@@ -20,7 +20,7 @@ class GildedRose
                       end
 
       item.quality  = item.quality.clamp(0, 50)
-    when "Backstage passes to a TAFKAL80ETC concert"
+    when /Backstage pass/
       item.sell_in -= 1
 
       item.quality += case item.sell_in
@@ -31,7 +31,7 @@ class GildedRose
                       end
 
       item.quality  = item.quality.clamp(0, 50)
-    when "Sulfuras, Hand of Ragnaros"
+    when /Sulfuras/
       # no-op
     else
       item.sell_in -= 1
